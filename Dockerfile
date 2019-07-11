@@ -53,7 +53,7 @@ RUN export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
     ldconfig && php5enmod zmq
 
 # Install NodeJS
-RUN apt-get install -yq npm && ln -sf /usr/bin/nodejs /usr/bin/node && npm install -g less less-plugin-clean-css uglify-js
+RUN apt-get install -yq npm && ln -sf /usr/bin/nodejs /usr/bin/node && npm install -g less less-plugin-clean-css uglify-js && npm cache clean -f && npm install -g n && n stable && ln -sf /usr/local/n/versions/node/11.8.0/bin/node /usr/bin/node
 
 # Install msmtp-mta
 RUN apt-get install -yq msmtp-mta && apt-get -y autoclean && apt-get -y clean

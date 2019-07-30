@@ -31,6 +31,12 @@ RUN apk update \
         && cd /usr/local/share/gini && bin/gini composer init -f \
         && /usr/local/bin/composer install --no-dev \
         && bin/gini cache \
+    && apk add add rpm libaio && curl -sLo /tmp/oracle.rpm http://files.docker.genee.in/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
+    && curl -sLo /tmp/oracle-devel.rpm http://files.docker.genee.in/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm \
+    && rpm -i --nodeps /tmp/oracle.rpm /tmp/oracle-devel.rpm \
+    && [ ! -d /tmp/oci8-2.1.8 ] && curl -sL https://pecl.php.net/get/oci8-2.1.8.tgz | tar -zxf - -C /tmp \
+    && cd /tmp/oci8-2.1.8 && phpize7 && ./configure --with-php-config=/usr/bin/php-config7 \
+    && make && make install \
     && rm -rf /var/cache/apk/*
 
 ADD msmtprc /etc/msmtprc

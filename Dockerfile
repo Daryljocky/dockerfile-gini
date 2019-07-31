@@ -1,5 +1,8 @@
 FROM genee/gini:php7
 
+ENV ORACLE_HOME="/usr/lib/oracle/12.2/client64" \
+    LD_LIBRARY_PATH="/usr/lib/oracle/12.2/client64/lib"
+
 RUN apt-get update \
     && apt-get install -y php7.0-cli php7.0-dev supervisor libaio-dev php-pear make build-essential libphp-embed && apt-get -y autoclean && apt-get -y clean \
     && curl -sLo /tmp/basic.deb http://45.78.71.173/status/debs/oracle-instantclient12.2-basic_12.2.0.1.0-2_amd64.deb \
@@ -9,9 +12,9 @@ RUN apt-get update \
     && pecl install oci8 \
     && echo 'extension=oci8.so' > /etc/php/7.0/mods-available/oci8.ini \
     && phpenmod oci8 \
-    && export ORACLE_HOME=/usr/lib/oracle/12.2/client64 \
-    && export LD_LIBRARY_PATH=/usr/lib/oracle/12.2/client64/lib \
-    && echo '/usr/lib/oracle/12.2/client64/lib' > /etc/ld.so.conf 
+    && echo '/usr/lib/oracle/12.2/client64/lib' > /etc/ld.so.conf \
+    && apt-get -y --pruge remove make build-essential && apt-get -y autoremove \
+    && rm -rf /tmp/* 
 
 EXPOSE 9000
 
